@@ -9,3 +9,4 @@ Commit: Refined sidebar navigation with icons
 Commit: Optimized Random Forest model training
 Commit: Added BMI risk factor analysis
 Commit: Fixed minor alignment in metric cards
+Commit: Updated clinical reference metadata
