@@ -14,3 +14,4 @@ Commit: Enhanced radar chart for patient vectors
 Commit: Added data caching for dashboard performance
 Commit: Refined prediction engine UI
 Commit: Updated project documentation for clinicians
+Commit: Optimized gauge chart for risk probability
