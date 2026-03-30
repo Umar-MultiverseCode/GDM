@@ -1,44 +1,48 @@
+import logging
 import pandas as pd
 import numpy as np
 
-# Load original dataset
-try:
-    df = pd.read_csv('diabetesGDM (1).csv')
-    print(f"Original dataset size: {len(df)}")
-except:
-    print("Dataset not found!")
-    exit()
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def augment_data(df, target_size=2000):
+def augment_data(df: pd.DataFrame, target_size: int = 2000) -> pd.DataFrame:
+    """
+    Performs data augmentation using stochastic noise injection to 
+    simulate clinical variability in synthetic records.
+    
+    Args:
+        df (pd.DataFrame): The source clinical dataset.
+        target_size (int): The desired total count of records.
+        
+    Returns:
+        pd.DataFrame: The expanded dataset including synthetic samples.
+    """
     current_size = len(df)
     needed = target_size - current_size
     
     if needed <= 0:
+        logging.info("Dataset already meets or exceeds target size. No augmentation required.")
         return df
     
-    print(f"Augmenting with {needed} new synthetic records...")
+    logging.info(f"Initiating augmentation sequence for {needed} synthetic clinical records...")
     
-    # Selecting existing rows randomly to duplicate with noise
     synthetic_records = []
     
+    # Process augmentation with Gaussian-like noise for feature realism
     for _ in range(needed):
-        # Randomly pick a sample from original
         sample = df.sample(1).iloc[0].copy()
         
-        # Add slight intelligent noise to numerical columns
-        # Glucose (+/- 5%)
+        # Clinical parameter variability simulation
         sample['Glucose'] *= np.random.uniform(0.95, 1.05)
-        # BMI (+/- 3%)
         sample['BMI'] *= np.random.uniform(0.97, 1.03)
-        # BloodPressure (+/- 5%)
+        
         if sample['BloodPressure'] > 0:
             sample['BloodPressure'] *= np.random.uniform(0.95, 1.05)
-        # Insulin (+/- 10%)
+            
         if sample['Insulin'] > 0:
             sample['Insulin'] *= np.random.uniform(0.90, 1.10)
-        # Age (+/- 2 years, capped at min 21)
-        sample['Age'] = max(21, sample['Age'] + np.random.randint(-2, 3))
-        # DPF (+/- 5%)
+            
+        sample['Age'] = max(21, int(sample['Age'] + np.random.randint(-2, 3)))
         sample['DiabetesPedigreeFunction'] *= np.random.uniform(0.95, 1.05)
         
         synthetic_records.append(sample)
@@ -46,25 +50,36 @@ def augment_data(df, target_size=2000):
     synthetic_df = pd.DataFrame(synthetic_records)
     new_df = pd.concat([df, synthetic_df], ignore_index=True)
     
-    # Basic rounding/cleanup
-    new_df['Pregnancies'] = new_df['Pregnancies'].apply(round)
-    new_df['Glucose'] = new_df['Glucose'].apply(round)
-    new_df['BloodPressure'] = new_df['BloodPressure'].apply(round)
-    new_df['SkinThickness'] = new_df['SkinThickness'].apply(round)
-    new_df['Insulin'] = new_df['Insulin'].apply(round)
-    new_df['Age'] = new_df['Age'].apply(round)
-    new_df['Outcome'] = new_df['Outcome'].apply(round)
+    # Post-processing: Quantize clinical metrics to integer representations
+    quantize_cols = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'Age', 'Outcome']
+    for col in quantize_cols:
+        new_df[col] = new_df[col].round().astype(int)
     
     return new_df
 
-# Generate extended dataset (1 Lakh records)
-extended_df = augment_data(df, target_size=100000)
+def main():
+    source_file = 'diabetesGDM (1).csv'
+    target_records = 100000
+    
+    try:
+        logging.info(f"Loading primary source: {source_file}")
+        df = pd.read_csv(source_file)
+    except FileNotFoundError:
+        logging.error(f"Critical Error: Data source '{source_file}' not found. Aborting.")
+        return
 
-# Save to the SAME file name (or new if requested, but same is easier for the app)
-extended_df.to_csv('diabetesGDM (1).csv', index=False)
-print(f"Dataset successfully extended to {len(extended_df)} records.")
+    # Execute Augmentation
+    extended_df = augment_data(df, target_size=target_records)
+    
+    # Persist Expanded Dataset
+    extended_df.to_csv(source_file, index=False)
+    logging.info(f"Dataset successfully persisted with {len(extended_df)} records.")
 
-# Re-train the model automatically with new data
-print("Re-training model with extended data...")
-import train_model
-print("Model re-trained and saved.")
+    # Re-train the model to capture expanded data distribution
+    logging.info("Starting automated model re-calibration...")
+    from train_model import train_gdm_model
+    train_gdm_model(source_file, 'gdm_model.pkl')
+    logging.info("Model re-calibration complete. System ready.")
+
+if __name__ == "__main__":
+    main()
