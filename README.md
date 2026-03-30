@@ -74,7 +74,6 @@ The GDM Clinical System follows a decoupled architecture ensuring data integrity
 
 | Component | Responsibility | Technology |
 | :--- | :--- | :--- |
-| **Ingestion Engine** | Stochastic data augmentation & normalization | `Pandas`, `NumPy` |
 | **Intelligence Core** | Ensemble learning (Random Forest) classification | `Scikit-learn` |
 | **UX Layer** | Interactive clinical dashboard | `Streamlit` |
 | **Telemetry** | Real-time logging & performance diagnostics | `Python Logging` |
