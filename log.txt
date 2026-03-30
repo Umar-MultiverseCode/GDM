@@ -1,2 +1,3 @@
 Commit: Initial medical portal prototype
 Commit: Added clinical datasets for GDM analysis
+Commit: Refined UI spacing and layout alignment
