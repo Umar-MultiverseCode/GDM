@@ -11,3 +11,4 @@ Commit: Added BMI risk factor analysis
 Commit: Fixed minor alignment in metric cards
 Commit: Updated clinical reference metadata
 Commit: Enhanced radar chart for patient vectors
+Commit: Added data caching for dashboard performance
