@@ -68,6 +68,19 @@ streamlit run app.py
 
 ---
 
+## 🏛️ System Architecture
+
+The GDM Clinical System follows a decoupled architecture ensuring data integrity and model reliability:
+
+| Component | Responsibility | Technology |
+| :--- | :--- | :--- |
+| **Ingestion Engine** | Stochastic data augmentation & normalization | `Pandas`, `NumPy` |
+| **Intelligence Core** | Ensemble learning (Random Forest) classification | `Scikit-learn` |
+| **UX Layer** | Interactive clinical dashboard | `Streamlit` |
+| **Telemetry** | Real-time logging & performance diagnostics | `Python Logging` |
+
+---
+
 ## 🔬 Clinical Parameters Used
 
 The model analyzes the following features to determine GDM susceptibility:
@@ -82,6 +95,15 @@ The model analyzes the following features to determine GDM susceptibility:
 
 ---
 
+## 🚀 Future Roadmap
+
+- [ ] **HL7 FHIR Integration**: Seamless connectivity with Hospital Information Systems.
+- [ ] **CNN-based Analysis**: Incorporating ultrasound imaging data.
+- [ ] **Multi-language Support**: Expanding clinical accessibility globally.
+- [ ] **Mobile Clinical Companion**: Native iOS/Android app for bedside diagnostics.
+
+---
+
 ## 🤝 Contribution & License
 
 Contributions are welcome! Feel free to open a PR or report a bug.
@@ -93,6 +115,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Clinical Compliance
 Designed with medical assessment guidelines in mind.
 
-
 ---
-*Audit Log: Security & Privacy Compliant*
+*Audit Log: Security & Privacy Compliant | Version 3.1*
