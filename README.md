@@ -89,3 +89,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 **Developed with ❤️ for Medical Clinical Intelligence | Umar-MultiverseCode**
+
+## Clinical Compliance
+Designed with medical assessment guidelines in mind.
