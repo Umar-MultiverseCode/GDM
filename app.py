@@ -1,3 +1,7 @@
+# Clinical AI Diagnostic System - Application Entry Point
+# Version: 3.1.0-clinical
+# Authorized clinician use only.
+
 import streamlit as st
 import pandas as pd
 import numpy as np
