@@ -16,92 +16,118 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Function to load Lottie animations
+# Clinical AI Diagnostic System - Application Entry Point
+
 def load_lottieurl(url: str):
-    r = requests.get(url)
-    if r.status_code != 200: return None
-    return r.json()
+    """
+    Fetches a Lottie animation JSON from a remote URL.
+    
+    Args:
+        url (str): The asset URL for the Lottie animation.
+        
+    Returns:
+        dict: The JSON animation data or None if the request fails.
+    """
+    try:
+        r = requests.get(url)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception:
+        return None
 
 lottie_medical = load_lottieurl("https://assets10.lottiefiles.com/packages/lf20_5njp3v67.json")
 lottie_scanning = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_6p8pS8.json")
 
-# Improved CSS for Structured & Premium UI
-st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-    
-    .stApp {
-        background-color: #0d1117;
-        color: #c9d1d9;
-        font-family: 'Outfit', sans-serif;
-    }
-    
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {
-        background-color: #161b22;
-        border-right: 1px solid #30363d;
-    }
-    
-    /* Center the main container */
-    .block-container {
-        padding-top: 2rem;
-        max-width: 1200px;
-    }
-    
-    /* Section Grouping - Removed background/border as per user request */
-    .section-container {
-        padding: 1rem 0;
-        margin-bottom: 2.5rem;
-    }
-    
-    /* Header Gradient */
-    .main-title {
-        background: linear-gradient(90deg, #58a6ff, #bc8cf2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Metric Styling */
-    [data-testid="stMetricValue"] {
-        color: #58a6ff;
-        font-weight: 600;
-    }
-    
-    /* Button Styling */
-    .stButton>button {
-        background: linear-gradient(90deg, #238636, #2ea043);
-        border: none;
-        color: white;
-        padding: 0.8rem 2rem;
-        font-weight: 600;
-        border-radius: 8px;
-        width: 100%;
-        margin-top: 1rem;
-    }
-    
-    /* Inputs Styling */
-    .stNumberInput input {
-        background-color: #0d1117;
-        color: white;
-        border: 1px solid #30363d;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+def apply_custom_styles():
+    """
+    Injects professional CSS into the Streamlit application to ensure a premium UI/UX.
+    """
+    st.markdown("""
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        .stApp {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background-color: #161b22;
+            border-right: 1px solid #30363d;
+        }
+        
+        /* Center the main container */
+        .block-container {
+            padding-top: 2rem;
+            max-width: 1200px;
+        }
+        
+        /* Section Grouping */
+        .section-container {
+            padding: 1rem 0;
+            margin-bottom: 2.5rem;
+        }
+        
+        /* Header Gradient */
+        .main-title {
+            background: linear-gradient(90deg, #58a6ff, #bc8cf2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Metric Styling */
+        [data-testid="stMetricValue"] {
+            color: #58a6ff;
+            font-weight: 600;
+        }
+        
+        /* Button Styling */
+        .stButton>button {
+            background: linear-gradient(90deg, #238636, #2ea043);
+            border: none;
+            color: white;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        /* Inputs Styling */
+        .stNumberInput input {
+            background-color: #0d1117;
+            color: white;
+            border: 1px solid #30363d;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-# Load Model
+# Initialize Design System
+apply_custom_styles()
+
 @st.cache_resource
-def load_model():
-    with open('gdm_model.pkl', 'rb') as f:
-        return pickle.load(f)
+def load_trained_model():
+    """
+    Loads the serialized Random Forest classifier from the local filesystem.
+    
+    Returns:
+        sklearn.ensemble.RandomForestClassifier: The trained model instance.
+    """
+    try:
+        with open('gdm_model.pkl', 'rb') as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        st.error("Model binary not found. Please run individual training first.")
+        st.stop()
 
-try:
-    model = load_model()
-except:
-    st.error("Model Error!")
-    st.stop()
+# Load Model Instance
+model = load_trained_model()
 
 df = pd.read_csv('diabetesGDM (1).csv')
 
