@@ -16,3 +16,4 @@ Commit: Refined prediction engine UI
 Commit: Updated project documentation for clinicians
 Commit: Optimized gauge chart for risk probability
 Commit: Added tooltips for patient parameters
+Commit: Refined dark mode color palette
