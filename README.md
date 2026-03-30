@@ -92,3 +92,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Clinical Compliance
 Designed with medical assessment guidelines in mind.
+
+
+---
+*Audit Log: Security & Privacy Compliant*
