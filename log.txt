@@ -18,3 +18,4 @@ Commit: Optimized gauge chart for risk probability
 Commit: Added tooltips for patient parameters
 Commit: Refined dark mode color palette
 Commit: Updated footer with project versioning
+Commit: Final clinical release for GDM diagnostics
