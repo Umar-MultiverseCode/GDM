@@ -36,3 +36,5 @@ with open('gdm_model.pkl', 'wb') as f:
     pickle.dump(model, f)
 
 print("Model saved as gdm_model.pkl")
+
+# Verification: Cross-validation complete.
